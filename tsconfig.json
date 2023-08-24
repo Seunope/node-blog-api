@@ -17,5 +17,8 @@
 		"rootDir": "./"
 	},
 	"include": ["src/**/*.ts", "src/envts", "src/jvjjvjts"],
-	"exclude": ["node_modules", "build"]
+	"exclude": ["node_modules", "build"],
+	"ts-node": {
+		"swc": true
+	}
 }

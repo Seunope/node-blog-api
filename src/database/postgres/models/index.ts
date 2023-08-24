@@ -1,4 +1,7 @@
-import CustomerModel from "./example";
+import UserModel from "./user";
+import PostModel from "./post";
+import CommentModel from "./comment";
+
 import { Sequelize } from "sequelize";
 import dbconfig from "../config/config";
 
@@ -16,7 +19,9 @@ if (config.use_env_variable) {
 const db = {
 	sequelize,
 	Sequelize,
-	tests: CustomerModel(sequelize)
+	users: UserModel(sequelize),
+	posts: PostModel(sequelize),
+	comments: CommentModel(sequelize)
 };
 
 Object.keys(db).forEach(modelName => {
