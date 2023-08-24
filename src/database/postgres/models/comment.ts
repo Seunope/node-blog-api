@@ -15,13 +15,13 @@ export class CommentModel extends Model<Comment, CommentCreationAttributes> impl
 
 	declare static paginate: (options: PaginateOptions<CommentModel>) => Promise<PaginationConnection<CommentModel>>;
 
-	declare post?: Post;
-	static associate(models) {
-		CommentModel.belongsTo(models.posts, {
-			foreignKey: "postId",
-			as: "post"
-		});
-	}
+	// declare post?: Post;
+	// static associate(models) {
+	// 	CommentModel.belongsTo(models.posts, {
+	// 		foreignKey: "postId",
+	// 		as: "post"
+	// 	});
+	// }
 }
 
 export default function (sequelize: Sequelize): typeof CommentModel {

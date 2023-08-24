@@ -29,7 +29,7 @@ module.exports = {
 				},
 				gender: {
 					allowNull: false,
-					type: DataTypes.ENUM("male", "female")
+					type: Sequelize.ENUM("male", "female")
 				},
 				image: {
 					type: Sequelize.STRING,

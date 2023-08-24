@@ -8,7 +8,7 @@ import routes from "./routes";
 import { stream } from "./logger";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
-import { errorHandler } from "@massteck/common-gpy";
+import { errorHandler } from "./modules/common/middlewares/error.middleware";
 
 const { PORT, NODE_ENV, SERVICE_PATH = "" } = process.env;
 const morganConfig = NODE_ENV === "development" ? "dev" : "tiny";
@@ -36,8 +36,5 @@ app.use(helmet(), compression(), express.urlencoded({ extended: true, limit: "10
 app.use(`/${SERVICE_PATH}`, routes);
 app.use("/", routes);
 app.use(errorHandler);
-// app.use("/", (_req, res) => {
-// 	res.send("API is up and running");
-// });
 
 export default app;

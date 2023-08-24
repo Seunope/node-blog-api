@@ -10,7 +10,7 @@ export class UserModel extends Model<User, UserCreationAttributes> implements Us
 	declare image?: string;
 	declare email: string;
 	declare gender: Gender;
-	declare lastLogin: string;
+	declare lastLogin: Date;
 	declare password: string;
 	declare createdAt?: string;
 	declare updatedAt?: string;

@@ -17,6 +17,25 @@ type AuthenticatedRequest = Request & {
 	};
 };
 
+export type TokenTime =
+	| "1 minutes"
+	| "3 minutes"
+	| "5 minutes"
+	| "10 minutes"
+	| "15 minutes"
+	| "30 minutes"
+	| "1 hour"
+	| "1 day"
+	| "3 days"
+	| "7 days";
+
+export interface TokenData {
+	name: string;
+	email: string;
+	userId: string;
+	expiresIn: string;
+}
+
 type AppError = Error & {
 	code: number;
 	name?: string;
@@ -36,7 +55,7 @@ interface User extends DefaultAttribs {
 	image?: string;
 	email: string;
 	gender: Gender;
-	lastLogin: string;
+	lastLogin: Date;
 	password: string;
 }
 

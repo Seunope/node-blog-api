@@ -1,9 +1,8 @@
 import { Router } from "express";
+import userRoute from "./user/user.routes";
 
-const router = Router();
+const serviceRoute = Router();
 
-router.use("/", async (req, res, next) => {
-	return res.send("You've hit /v1");
-});
+serviceRoute.use("/users", userRoute);
 
-export default router;
+export default serviceRoute;
