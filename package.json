@@ -53,7 +53,6 @@
 		"sequelize": "^6.6.5",
 		"sequelize-cli": "^6.2.0",
 		"sequelize-cursor-pagination": "^3.4.0",
-		"swagger-ui-express": "^4.1.6",
 		"winston": "^3.8.2",
 		"winston-daily-rotate-file": "^4.7.1"
 	},

@@ -1,4 +1,4 @@
-import { Post, ExcludedAttribs } from "../../../types";
+import { Post, ExcludedAttribs, User } from "../../../types";
 import { Model, DataTypes, Optional, Sequelize } from "sequelize";
 import { PaginateOptions, PaginationConnection, makePaginate } from "sequelize-cursor-pagination";
 
@@ -15,6 +15,14 @@ export class PostModel extends Model<Post, PostCreationAttributes> implements Po
 	declare updatedAt?: string;
 	declare deletedAt?: string;
 	declare static paginate: (options: PaginateOptions<PostModel>) => Promise<PaginationConnection<PostModel>>;
+
+	declare user?: User;
+	static associate(models) {
+		PostModel.belongsTo(models.users, {
+			foreignKey: "userId",
+			as: "user"
+		});
+	}
 }
 
 export default function (sequelize: Sequelize): typeof PostModel {
