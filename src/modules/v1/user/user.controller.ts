@@ -1,7 +1,7 @@
 import Users from "./user.service";
-import { AuthenticatedRequest, TokenData } from "../../../types";
 import { decrypt, hash } from "../../common/hashes";
 import { Request, Response, NextFunction } from "express";
+import { AuthenticatedRequest, TokenData } from "../../../types";
 import AuthenticationService from "../authentication/authenticate.service";
 import { onSuccess, createError } from "../../common/middlewares/error.middleware";
 

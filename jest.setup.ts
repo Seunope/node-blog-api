@@ -1,9 +1,18 @@
 import http from "http";
 import app from "./src/app";
+import request from "supertest";
 const { TEST_PORT } = process.env;
 import db from "./src/database/postgres/models";
 
-jest.setTimeout(80000);
+declare global {
+	namespace NodeJS {
+		interface Global {
+			login(): Promise<string[]>;
+		}
+	}
+}
+
+jest.setTimeout(90000);
 const server = http.createServer(app);
 beforeAll(done => {
 	db.sequelize
@@ -16,6 +25,23 @@ beforeAll(done => {
 		})
 		.catch(e => console.log(`Failed to connect to database:, ${e.message}`));
 });
-afterAll(async () => {
-	await server.close();
+afterAll(() => {
+	server.close();
 });
+
+global.login = async () => {
+	const email = "a@g.com";
+	const password = "12345678";
+
+	const response = await request(app)
+		.post("/v1/users/login")
+		.send({
+			email,
+			password
+		})
+		.expect(200);
+
+	const cookie = response.get("Set-Cookie");
+
+	return cookie;
+};

@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../../../app";
 
-describe("TEST SUITE FOR CUSTOMER", () => {
+describe("Sign up Test Suite", () => {
 	it("adds 1 + 2 to equal 3", () => {
 		const sum = (a, b) => a + b;
 		expect(sum(1, 2)).toBe(3);
@@ -19,24 +19,23 @@ describe("TEST SUITE FOR CUSTOMER", () => {
 			});
 	});
 
-	// it("Sign up success", done => {
-	// 	var input = {
-	// 		firstName: "Opeoluwas",
-	// 		lastName: "mesonorale",
-	// 		email: "aaa@g.com",
-	// 		phoneNumber: "07055829539",
-	// 		password: "12345678"
-	// 	};
-	// 	request(app)
-	// 		.post("/v1/customer/signup")
-	// 		.send(input)
-	// 		.then(response => {
-	// 			expect(response.statusCode).toBe(200);
-	// 			done();
-	// 		})
-	// 		.catch(error => {
-	// 			console.log("error - ");
-	// 			console.log(error);
-	// 		});
-	// });
+	it("Sign up success", done => {
+		var input = {
+			firstName: "Opeoluwa",
+			lastName: "Mesonrale",
+			gender: "male",
+			email: "a@g.com",
+			password: "12345678"
+		};
+		request(app)
+			.post("/v1/users")
+			.send(input)
+			.then(response => {
+				expect(response.statusCode).toBe(200);
+				done();
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	});
 });
