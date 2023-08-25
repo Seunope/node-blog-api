@@ -1,10 +1,7 @@
-import Users from "./post.service";
-import { decrypt, hash } from "../../common/hashes";
-import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest, TokenData } from "../../../types";
-import AuthenticationService from "../authentication/authenticate.service";
-import { onSuccess, createError } from "../../common/middlewares/error.middleware";
 import Posts from "./post.service";
+import { Response, NextFunction } from "express";
+import { AuthenticatedRequest } from "../../../types";
+import { onSuccess, createError } from "../../common/middlewares/error.middleware";
 import { handlePagination, handlePaginationRequest } from "../../common/utils";
 
 export const createPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -29,7 +26,7 @@ export const createPost = async (req: AuthenticatedRequest, res: Response, next:
 			content
 		});
 
-		return res.status(200).json(onSuccess("Post created successfully", { ...new Users().getPost(post) }));
+		return res.status(200).json(onSuccess("Post created successfully", { ...new Posts().getPost(post) }));
 	} catch (error) {
 		next(error);
 	}

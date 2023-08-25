@@ -1,11 +1,7 @@
-import Users from "./comnet.service";
-import { decrypt, hash } from "../../common/hashes";
-import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest, TokenData } from "../../../types";
-import AuthenticationService from "../authentication/authenticate.service";
+import Comments from "./comment.service";
+import { Response, NextFunction } from "express";
+import { AuthenticatedRequest } from "../../../types";
 import { onSuccess, createError } from "../../common/middlewares/error.middleware";
-import Posts from "./comnet.service";
-import { handlePagination, handlePaginationRequest } from "../../common/utils";
 
 export const createComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
 	try {
@@ -15,41 +11,21 @@ export const createComment = async (req: AuthenticatedRequest, res: Response, ne
 			body: { content }
 		} = req;
 
-		const postCheck = await new Posts("", "", title).findOne().catch(e => {
-			throw createError("Strange event happened while creating your post", 500);
+		const commentCheck = await new Comments("", userId, postId, content).findOne().catch(e => {
+			throw createError("Strange event happened while adding your comment", 500);
 		});
 
-		if (postCheck) {
-			throw createError("Whoops! You have already created a post with this title", 400);
+		if (commentCheck) {
+			throw createError("Whoops! You have already added this comment to the post", 400);
 		}
 
-		const post = await new Posts("", userId, title).create({
-			tags,
-			title,
+		const comment = await new Comments("", userId, postId, content).create({
 			userId,
+			postId,
 			content
 		});
 
-		return res.status(200).json(onSuccess("Post created successfully", { ...new Users().getPost(post) }));
-	} catch (error) {
-		next(error);
-	}
-};
-
-export const userPosts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-	try {
-		const {
-			params: { userId }
-		} = req;
-
-		let whereClause = req.query.where;
-		whereClause["userId"] = userId;
-		req.query.where = whereClause;
-
-		const posts = await new Posts().findAllPaginated(handlePaginationRequest(req.query));
-		const data = handlePagination(posts, "posts");
-
-		return res.status(200).json(onSuccess("Action was successful", { data }));
+		return res.status(200).json(onSuccess("Post created successfully", { ...new Comments().getComment(comment) }));
 	} catch (error) {
 		next(error);
 	}

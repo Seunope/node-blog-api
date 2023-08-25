@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { isEmpty } from "lodash";
 import { Comment } from "../../../types";
-import db from "../../../database/commentgres/models";
+import db from "../../../database/postgres/models";
 import { createError } from "../../common/middlewares/error.middleware";
 
 const { comments } = db;
@@ -11,12 +11,14 @@ class Comments {
 
 	private id: string;
 	private userId: string;
-	private title: string;
+	private postId: string;
+	private content: string;
 
-	constructor(id = "", userId = "", title = "") {
+	constructor(id = "", userId = "", postId = "", content = "") {
 		this.id = id;
-		this.title = title;
+		this.postId = postId;
 		this.userId = userId;
+		this.content = content;
 	}
 
 	public async create(params: Partial<Comment>) {
@@ -36,7 +38,8 @@ class Comments {
 				where: {
 					...(this.id && { id: this.id }),
 					...(this.userId && { userId: this.userId }),
-					...(this.title && { content: this.title })
+					...(this.postId && { postId: this.postId }),
+					...(this.content && { content: this.content })
 				}
 			})
 			.catch(e => {
@@ -95,15 +98,14 @@ class Comments {
 		});
 	}
 
-	public getComment(p: Comment) {
-		if (p) {
+	public getComment(c: Comment) {
+		if (c) {
 			return {
-				id: p.id,
-				tags: p.tags,
-				views: p.views,
-				title: p.title,
-				content: p.content,
-				createdAt: p.createdAt
+				id: c.id,
+				postId: c.postId,
+				userId: c.userId,
+				content: c.content,
+				createdAt: c.createdAt
 			};
 		}
 	}

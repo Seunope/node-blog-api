@@ -1,17 +1,11 @@
 import { Router } from "express";
-import { signupRules, loginRules } from "./post.validation";
+import { createComment } from "../comment/comment.controller";
+import { createCommentRules } from "../comment/comment.validation";
 import { authMiddleware } from "../../common/middlewares/auth.middleware";
-import { loginAccount, createAccount, refreshToken, userData } from "./post.controller";
 import { validationMiddleware } from "../../common/middlewares/validation.middleware";
 
-const userRoute = Router();
+const postRoute = Router();
 
-userRoute.post("/", signupRules, validationMiddleware, createAccount);
-userRoute.get("/", authMiddleware, validationMiddleware, userData);
-userRoute.post("/login", loginRules, validationMiddleware, loginAccount);
-userRoute.get("/refresh-token", authMiddleware, validationMiddleware, refreshToken);
+postRoute.post("/:postId/comments", authMiddleware, validationMiddleware, createCommentRules, validationMiddleware, createComment);
 
-userRoute.get("/:id/posts", loginRules, validationMiddleware, loginAccount);
-userRoute.post("/:id/posts", loginRules, validationMiddleware, loginAccount);
-
-export default userRoute;
+export default postRoute;
