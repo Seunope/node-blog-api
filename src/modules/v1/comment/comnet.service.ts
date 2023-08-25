@@ -1,28 +1,30 @@
 import { Op } from "sequelize";
 import { isEmpty } from "lodash";
-import { User } from "../../../types";
-import db from "../../../database/postgres/models";
+import { Comment } from "../../../types";
+import db from "../../../database/commentgres/models";
 import { createError } from "../../common/middlewares/error.middleware";
 
-const { users } = db;
+const { comments } = db;
 
-class Users {
-	private model = db.users;
+class Comments {
+	private model = db.comments;
 
 	private id: string;
-	private email: string;
+	private userId: string;
+	private title: string;
 
-	constructor(id = "", email = "") {
-		this.email = email;
+	constructor(id = "", userId = "", title = "") {
 		this.id = id;
+		this.title = title;
+		this.userId = userId;
 	}
 
-	public async create(params: Partial<User>) {
+	public async create(params: Partial<Comment>) {
 		const exist = await this.findOne().catch(e => {
 			throw e;
 		});
-		if (exist) throw createError("You already have an account", 400);
-		const result = await users.create(params).catch(e => {
+		if (exist) throw createError("You already made this comment", 400);
+		const result = await comments.create(params).catch(e => {
 			throw e;
 		});
 		return result;
@@ -33,7 +35,8 @@ class Users {
 			.findOne({
 				where: {
 					...(this.id && { id: this.id }),
-					...(this.email && { email: this.email })
+					...(this.userId && { userId: this.userId }),
+					...(this.title && { content: this.title })
 				}
 			})
 			.catch(e => {
@@ -43,11 +46,11 @@ class Users {
 		return result;
 	}
 
-	public async updateOne(params: Partial<User>) {
+	public async updateOne(params: Partial<Comment>) {
 		const result = await this.findOne().catch(e => {
 			throw e;
 		});
-		if (!result) throw createError("Cannot update invalid result account", 400);
+		if (!result) throw createError("Cannot update invalid data", 400);
 
 		result.update(params).catch(e => {
 			throw e;
@@ -60,7 +63,7 @@ class Users {
 		const result = await this.findOne().catch(e => {
 			throw e;
 		});
-		if (!result) throw createError("Cannot delete invalid result account", 400);
+		if (!result) throw createError("Cannot delete invalid data", 400);
 
 		result.destroy().catch(e => {
 			throw e;
@@ -71,7 +74,7 @@ class Users {
 	public async findAll(limit = 10) {
 		const results = await this.model
 			.findAll({
-				order: [["idx", "DESC"]],
+				order: [[`createdAt`, "DESC"]],
 				limit,
 				attributes: { exclude: ["updatedAt", "deletedAt"] }
 			})
@@ -88,29 +91,22 @@ class Users {
 			limit,
 			after,
 			before,
-			// include: [
-			// 	{
-			// 		model: db.loanProviders,
-			// 		as: "provider",
-			// 		attributes: ["businessName", "rating"]
-			// 	}
-			// ],
 			order: !isEmpty(order) ? [[`${order.sortBy}`, `${order.sortIn}`]] : [[`createdAt`, `DESC`]] //ASC
 		});
 	}
 
-	public getUser(c: User) {
-		if (c) {
+	public getComment(p: Comment) {
+		if (p) {
 			return {
-				id: c.id,
-				name: c.name,
-				email: c.email,
-				image: c.image,
-				gender: c.gender,
-				lastLogin: c.lastLogin
+				id: p.id,
+				tags: p.tags,
+				views: p.views,
+				title: p.title,
+				content: p.content,
+				createdAt: p.createdAt
 			};
 		}
 	}
 }
 
-export default Users;
+export default Comments;
