@@ -12,6 +12,7 @@ export const createComment = async (req: AuthenticatedRequest, res: Response, ne
 		} = req;
 
 		const commentCheck = await new Comments("", userId, postId, content).findOne().catch(e => {
+			console.log("DDDD", e);
 			throw createError("Strange event happened while adding your comment", 500);
 		});
 
@@ -25,7 +26,7 @@ export const createComment = async (req: AuthenticatedRequest, res: Response, ne
 			content
 		});
 
-		return res.status(200).json(onSuccess("Post created successfully", { ...new Comments().getComment(comment) }));
+		return res.status(200).json(onSuccess("Comment added successfully", { ...new Comments().getComment(comment) }));
 	} catch (error) {
 		next(error);
 	}

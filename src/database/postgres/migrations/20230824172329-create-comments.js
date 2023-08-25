@@ -4,7 +4,7 @@
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		return queryInterface.createTable(
-			"posts",
+			"comments",
 			{
 				id: {
 					unique: true,
@@ -50,6 +50,6 @@ module.exports = {
 	},
 
 	async down(queryInterface, Sequelize) {
-		return queryInterface.dropTable("posts");
+		return queryInterface.dropTable("comments");
 	}
 };

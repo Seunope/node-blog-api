@@ -19,6 +19,7 @@ export const createPost = async (req: AuthenticatedRequest, res: Response, next:
 			throw createError("Whoops! You have already created a post with this title", 400);
 		}
 
+		// console.log("tags", tags);
 		const post = await new Posts("", userId, title).create({
 			tags,
 			title,
@@ -39,13 +40,37 @@ export const userPosts = async (req: AuthenticatedRequest, res: Response, next: 
 		} = req;
 
 		let whereClause = req.query.where;
-		whereClause["userId"] = userId;
+		if (!whereClause) {
+			whereClause = {
+				userId: userId
+			};
+		}
 		req.query.where = whereClause;
 
 		const posts = await new Posts().findAllPaginated(handlePaginationRequest(req.query));
 		const data = handlePagination(posts, "posts");
 
-		return res.status(200).json(onSuccess("Action was successful", { data }));
+		return res.status(200).json(onSuccess("Action was successful", { ...data }));
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const topUsers = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+	try {
+		const posts = await new Posts().getTop3Users();
+
+		return res.status(200).json(onSuccess("Action was successful", { posts }));
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const topUsersOptimized = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+	try {
+		const posts = await new Posts().getTop3UsersOptimized();
+
+		return res.status(200).json(onSuccess("Action was successful", { posts }));
 	} catch (error) {
 		next(error);
 	}

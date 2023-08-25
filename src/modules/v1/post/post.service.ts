@@ -1,6 +1,6 @@
-import { Op } from "sequelize";
 import { isEmpty } from "lodash";
 import { Post } from "../../../types";
+import { Op, QueryTypes } from "sequelize";
 import db from "../../../database/postgres/models";
 import { createError } from "../../common/middlewares/error.middleware";
 
@@ -8,6 +8,7 @@ const { posts } = db;
 
 class Posts {
 	private model = db.posts;
+	private raw = db.sequelize;
 
 	private id: string;
 	private userId: string;
@@ -36,7 +37,7 @@ class Posts {
 				where: {
 					...(this.id && { id: this.id }),
 					...(this.userId && { userId: this.userId }),
-					...(this.title && { content: this.title })
+					...(this.title && { title: this.title })
 				}
 			})
 			.catch(e => {
@@ -98,14 +99,64 @@ class Posts {
 	public getPost(p: Post) {
 		if (p) {
 			return {
-				id: p.id,
-				tags: p.tags,
-				views: p.views,
-				title: p.title,
-				content: p.content,
-				createdAt: p.createdAt
+				id: posts.id,
+				tags: posts.tags,
+				views: posts.views,
+				title: posts.title,
+				content: posts.content,
+				createdAt: posts.createdAt
 			};
 		}
+	}
+
+	public async getTop3Users() {
+		const result = await this.raw
+			.query(
+				`
+				SELECT users.id, users.name, posts.title, comments.content
+				FROM "users"
+				LEFT JOIN "posts" ON users.id = posts."userId"
+				LEFT JOIN "comments" ON posts.id = comments."postId"
+				WHERE comments."createdAt" = (SELECT MAX("createdAt") FROM comments WHERE "postId" = posts.id)
+				ORDER BY (SELECT COUNT(posts.id) FROM posts WHERE posts."userId" = users.id) DESC
+				LIMIT 3;
+                `,
+				{
+					type: QueryTypes.SELECT
+				}
+			)
+			.catch(e => {
+				throw e;
+			});
+
+		return result;
+	}
+
+	public async getTop3UsersOptimized() {
+		const result = await this.raw
+			.query(
+				`
+				SELECT users.id, users.name, posts.title, comments.content
+				FROM (
+					SELECT "userId", MAX("createdAt") AS latest_comment_time
+					FROM comments
+					GROUP BY "postId",  "userId"
+				) AS latest_comments
+				JOIN users users ON users.id = latest_comments."userId"
+				JOIN posts posts ON users.id = posts."userId"
+				JOIN comments comments ON posts.id = comments."postId" AND latest_comments.latest_comment_time = comments."createdAt"
+				ORDER BY (SELECT COUNT(*) FROM posts WHERE "userId" = users.id) DESC
+				LIMIT 3;
+                `,
+				{
+					type: QueryTypes.SELECT
+				}
+			)
+			.catch(e => {
+				throw e;
+			});
+
+		return result;
 	}
 }
 

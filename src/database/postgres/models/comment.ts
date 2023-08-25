@@ -68,7 +68,7 @@ export default function (sequelize: Sequelize): typeof CommentModel {
 		},
 		{
 			modelName: "Comment",
-			tableName: "Comments",
+			tableName: "comments",
 			sequelize,
 			paranoid: true,
 			updatedAt: true,
