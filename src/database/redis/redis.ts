@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import { createError } from "package-middlewares";
+import { createError } from "../../modules/common/middlewares/error.middleware";
 
 export class RedisService {
 	private client = createClient();

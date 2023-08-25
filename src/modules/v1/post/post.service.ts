@@ -99,12 +99,12 @@ class Posts {
 	public getPost(p: Post) {
 		if (p) {
 			return {
-				id: posts.id,
-				tags: posts.tags,
-				views: posts.views,
-				title: posts.title,
-				content: posts.content,
-				createdAt: posts.createdAt
+				id: p.id,
+				tags: p.tags,
+				views: p.views,
+				title: p.title,
+				content: p.content,
+				createdAt: p.createdAt
 			};
 		}
 	}

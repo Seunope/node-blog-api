@@ -50,6 +50,7 @@
 		"nanoid": "^3.1.25",
 		"pg": "^8.7.1",
 		"pg-hstore": "^2.3.4",
+		"redis": "^4.6.8",
 		"sequelize": "^6.6.5",
 		"sequelize-cli": "^6.2.0",
 		"sequelize-cursor-pagination": "^3.4.0",
