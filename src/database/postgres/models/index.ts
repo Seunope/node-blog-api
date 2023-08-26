@@ -8,6 +8,7 @@ import dbconfig from "../config/config";
 const { NODE_ENV = "development" } = process.env;
 
 const config = dbconfig[NODE_ENV];
+// console.log("configX", config);
 
 let sequelize: Sequelize;
 if (config.use_env_variable) {

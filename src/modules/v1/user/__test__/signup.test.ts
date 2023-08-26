@@ -7,35 +7,66 @@ describe("Sign up Test Suite", () => {
 		expect(sum(1, 2)).toBe(3);
 	});
 
-	it("Test if application is running", done => {
-		request(app)
-			.get("/")
-			.then(response => {
-				expect(response.statusCode).toBe(200);
-				done();
-			})
-			.catch(error => {
-				console.log(error);
-			});
+	test("Test if application is running", async () => {
+		const data = await request(app).get("/");
+		expect(data.statusCode).toBe(200);
 	});
 
-	it("Sign up success", done => {
-		var input = {
-			firstName: "Opeoluwa",
-			lastName: "Mesonrale",
+	test("Sign up with no email", async () => {
+		const input = {
+			name: "Opeoluwa",
+			gender: "male",
+			email: "ag.com",
+			password: "12345678"
+		};
+		const data = await request(app).post("/v1/users").send(input);
+		expect(data.statusCode).toBe(422);
+	});
+
+	test("Sign up with no password", async () => {
+		const input = {
+			name: "Opeoluwa",
+			gender: "male",
+			email: "a@g.com",
+			password: ""
+		};
+		const data = await request(app).post("/v1/users").send(input);
+		expect(data.statusCode).toBe(422);
+	});
+
+	// test("Sign up wit no password", async () => {
+	// 	expect.assertions(1);
+	// 	const input = {
+	// 		name: "Opeoluwa",
+	// 		gender: "male",
+	// 		email: "a@g.com",
+	// 		password: ""
+	// 	};
+	// 	try {
+	// 		await request(app).post("/v1/users").send(input);
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 		expect(e).toMatch("error");
+	// 	}
+	// });
+
+	test("Sign up success", async () => {
+		const input = {
+			name: "Opeoluwa",
 			gender: "male",
 			email: "a@g.com",
 			password: "12345678"
 		};
-		request(app)
-			.post("/v1/users")
-			.send(input)
-			.then(response => {
-				expect(response.statusCode).toBe(200);
-				done();
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		const data = await request(app).post("/v1/users").send(input);
+		expect(data.statusCode).toBe(200);
 	});
+
+	// test("Login up successful", async () => {
+	// 	var input = {
+	// 		email: "a@g.com",
+	// 		password: "12345678"
+	// 	};
+	// 	const data = await request(app).post("/v1/users/login").send(input);
+	// 	expect(data.statusCode).toBe(200);
+	// });
 });

@@ -1,7 +1,5 @@
-import { check, param, query, body } from "express-validator";
+import { check } from "express-validator";
 import { createError } from "../../common/middlewares/error.middleware";
-
-const { NODE_ENV } = process.env;
 
 export const signupRules = [
 	check("name").notEmpty().isString().withMessage("Enter your  name"),

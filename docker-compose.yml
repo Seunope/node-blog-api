@@ -1,0 +1,21 @@
+version: "3.6"
+services:
+  app:
+    build: .
+    ports:
+      - 2000:2000
+    env_file: .env
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password2020
+      POSTGRES_DB: risevest_db
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:

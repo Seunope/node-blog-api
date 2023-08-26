@@ -1,4 +1,4 @@
-const { DB_HOST, DB_NAME, DB_PASS, DB_USER, DB_PORT, TEST_DB_NAME, DB_MIGRATION_TABLE } = process.env;
+const { DB_HOST, DB_NAME, DB_PASS, DB_USER, DB_PORT, TEST_DB_PASS, TEST_DB_NAME, DB_MIGRATION_TABLE } = process.env;
 
 export default {
 	development: {
@@ -23,12 +23,12 @@ export default {
 		port: DB_PORT,
 		logging: false,
 		username: DB_USER,
-		password: DB_PASS,
+		password: TEST_DB_PASS,
 		database: TEST_DB_NAME,
 		dialect: "postgres",
 		dialectOptions: {
 			ssl: {
-				require: true,
+				require: false,
 				rejectUnauthorized: false
 			}
 		},

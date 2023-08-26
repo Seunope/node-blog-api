@@ -4,17 +4,19 @@ import { Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest, TokenData } from "../../../types";
 import AuthenticationService from "../authentication/authenticate.service";
 import { onSuccess, createError } from "../../common/middlewares/error.middleware";
+import { handlePaginationRequest, handlePagination } from "../../common/utils";
 
 export const createAccount = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { name, email, gender, password } = req.body;
 
 		const userCheck = await new Users("", email).findOne().catch(e => {
+			console.log("e", e);
 			throw createError("Strange event happened while creating your account", 500);
 		});
 
 		if (userCheck) {
-			throw createError("Whoops! An account already existed with this details. Proceed to login", 400);
+			throw createError("Whoops! An account already existed with this details. Proceed to login", 500);
 		}
 
 		const customer = await new Users("", email).create({
@@ -40,7 +42,7 @@ export const loginAccount = async (req: Request, res: Response, next: NextFuncti
 		if (!user) throw createError("Email or password not correct", 400);
 
 		if (!decrypt({ input: password, record: user.password })) {
-			throw createError("Invalid email or Password");
+			throw createError("Invalid email or Password", 400);
 		}
 
 		await new Users("", email).updateOne({
@@ -65,22 +67,33 @@ export const loginAccount = async (req: Request, res: Response, next: NextFuncti
 	}
 };
 
-export const userData = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+// export const userData = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+// 	try {
+// 		let userId = req.user.userId;
+// 		if (req.query.userId) {
+// 			userId = req.query.userId;
+// 		}
+
+// 		const user = await new Users(userId).findOne().catch(e => {
+// 			throw createError("There was an error processing your request", 500);
+// 		});
+
+// 		if (!user) {
+// 			throw createError("User not found", 500);
+// 		}
+
+// 		return res.status(200).json(onSuccess("Action successful", { user }));
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// };
+
+export const appUsers = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		let userId = req.user.userId;
-		if (req.query.userId) {
-			userId = req.query.userId;
-		}
+		const posts = await new Users().findAllPaginated(handlePaginationRequest(req.query));
+		const data = handlePagination(posts, "posts");
 
-		const user = await new Users(userId).findOne().catch(e => {
-			throw createError("There was an error processing your request", 500);
-		});
-
-		if (!user) {
-			throw createError("User not found", 500);
-		}
-
-		return res.status(200).json(onSuccess("Action successful", { user }));
+		return res.status(200).json(onSuccess("Users retrieved", { ...data }));
 	} catch (error) {
 		next(error);
 	}
