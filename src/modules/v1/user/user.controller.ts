@@ -67,27 +67,6 @@ export const loginAccount = async (req: Request, res: Response, next: NextFuncti
 	}
 };
 
-// export const userData = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-// 	try {
-// 		let userId = req.user.userId;
-// 		if (req.query.userId) {
-// 			userId = req.query.userId;
-// 		}
-
-// 		const user = await new Users(userId).findOne().catch(e => {
-// 			throw createError("There was an error processing your request", 500);
-// 		});
-
-// 		if (!user) {
-// 			throw createError("User not found", 500);
-// 		}
-
-// 		return res.status(200).json(onSuccess("Action successful", { user }));
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// };
-
 export const appUsers = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const posts = await new Users().findAllPaginated(handlePaginationRequest(req.query));

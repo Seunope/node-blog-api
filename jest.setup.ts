@@ -16,7 +16,7 @@ jest.setTimeout(30000);
 const server = http.createServer(app);
 beforeAll(done => {
 	db.sequelize
-		.sync({ force: true, logging: console.log })
+		.sync({ force: true })
 		.then(() => {
 			// app.listen(TEST_PORT, () => {
 			// 	console.log(`Application started on port: ${TEST_PORT}`);
@@ -29,19 +29,21 @@ afterAll(() => {
 	server.close();
 });
 
-// global.login = async () => {
-// 	const email = "a@g.com";
-// 	const password = "12345678";
+global.login = async () => {
+	const email = "a@g.com";
+	const password = "12345678";
 
-// 	const response = await request(app)
-// 		.post("/v1/users/login")
-// 		.send({
-// 			email,
-// 			password
-// 		})
-// 		.expect(200);
+	console.log(" I was called Login");
 
-// 	const cookie = response.get("Set-Cookie");
+	const response = await request(app)
+		.post("/v1/users/login")
+		.send({
+			email,
+			password
+		})
+		.expect(200);
 
-// 	return cookie;
-// };
+	const cookie = response.get("Set-Cookie");
+
+	return cookie;
+};
