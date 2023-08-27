@@ -1,5 +1,4 @@
 import { check, param, query, body } from "express-validator";
-import { createError } from "../../common/middlewares/error.middleware";
 
 export const createPostRules = [
 	param("userId").notEmpty().isUUID().withMessage("Enter your user id"),

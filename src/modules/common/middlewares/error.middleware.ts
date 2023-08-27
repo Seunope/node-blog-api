@@ -28,8 +28,6 @@ export function errorHandler(error: AppError, req: any, res: Response, _next: an
 			}
 		}
 
-		// eslint-disable-next-line no-console
-		// console.log(error.name || "Error :", error.message, "\n", error.stack);
 		logger.error(`${error.name} || "Error :", ${error.message} \n ${error.stack}`);
 
 		if (req.transaction) {

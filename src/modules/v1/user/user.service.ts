@@ -88,13 +88,6 @@ class Users {
 			limit,
 			after,
 			before,
-			// include: [
-			// 	{
-			// 		model: db.loanProviders,
-			// 		as: "provider",
-			// 		attributes: ["businessName", "rating"]
-			// 	}
-			// ],
 			order: !isEmpty(order) ? [[`${order.sortBy}`, `${order.sortIn}`]] : [[`createdAt`, `DESC`]] //ASC
 		});
 	}

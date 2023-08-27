@@ -16,6 +16,13 @@ export class UserModel extends Model<User, UserCreationAttributes> implements Us
 	declare updatedAt?: string;
 	declare deletedAt?: string;
 	declare static paginate: (options: PaginateOptions<UserModel>) => Promise<PaginationConnection<UserModel>>;
+
+	static associate(models) {
+		UserModel.hasMany(models.posts, {
+			foreignKey: "userId",
+			as: "user"
+		});
+	}
 }
 
 export default function (sequelize: Sequelize): typeof UserModel {

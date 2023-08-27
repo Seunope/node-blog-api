@@ -17,6 +17,7 @@
 		"dev": "nodemon -r dotenv/config src/index.ts",
 		"start": "node -r dotenv/config build/src/index.js",
 		"migrate": "yarn sequelize-cli db:migrate",
+		"migrate:docker": "yarn dotenv/config sequelize-cli db:migrate",
 		"migrate:u": "yarn sequelize-cli db:migrate:undo",
 		"migrate:u:file": "yarn sequelize-cli db:migrate:undo --name",
 		"migrate:u:a": "yarn sequelize-cli db:migrate:undo:all",

@@ -1,9 +1,9 @@
 import Posts from "./post.service";
+import Users from "../user/user.service";
 import { Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../../../types";
 import { onSuccess, createError } from "../../common/middlewares/error.middleware";
 import { handlePagination, handlePaginationRequest } from "../../common/utils";
-import Users from "../user/user.service";
 
 export const createPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
 	try {

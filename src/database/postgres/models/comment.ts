@@ -1,4 +1,4 @@
-import { Comment, ExcludedAttribs, Post } from "../../../types";
+import { Comment, ExcludedAttribs, User } from "../../../types";
 import { Model, DataTypes, Optional, Sequelize } from "sequelize";
 import { PaginateOptions, PaginationConnection, makePaginate } from "sequelize-cursor-pagination";
 
@@ -15,13 +15,13 @@ export class CommentModel extends Model<Comment, CommentCreationAttributes> impl
 
 	declare static paginate: (options: PaginateOptions<CommentModel>) => Promise<PaginationConnection<CommentModel>>;
 
-	// declare post?: Post;
-	// static associate(models) {
-	// 	CommentModel.belongsTo(models.posts, {
-	// 		foreignKey: "postId",
-	// 		as: "post"
-	// 	});
-	// }
+	declare user?: User;
+	static associate(models) {
+		CommentModel.belongsTo(models.users, {
+			foreignKey: "userId",
+			as: "user"
+		});
+	}
 }
 
 export default function (sequelize: Sequelize): typeof CommentModel {

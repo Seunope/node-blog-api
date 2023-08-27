@@ -10,10 +10,10 @@ export default {
 		database: DB_NAME,
 		dialect: "postgres",
 		dialectOptions: {
-			ssl: {
-				require: true,
-				rejectUnauthorized: false
-			}
+			// ssl: {
+			// 	// require: true,
+			// 	rejectUnauthorized: false
+			// }
 		},
 		use_env_variable: false,
 		...(DB_MIGRATION_TABLE ? { migrationStorageTableName: DB_MIGRATION_TABLE } : {})
