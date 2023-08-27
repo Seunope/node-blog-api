@@ -1,5 +1,7 @@
 # NODE-BLOG-BACKEND-API
 
+Simple API for blog that have users, posts and comments
+
 ## Get started
 
 Edit the env.sample created for you by default, edit it with your basic info then run:
