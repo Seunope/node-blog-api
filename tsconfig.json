@@ -16,7 +16,7 @@
 		"jsx": "preserve",
 		"rootDir": "./"
 	},
-	"include": ["src/**/*.ts", "src/envts", "src/jvjjvjts"],
+	"include": ["src/**/*.ts", "src/envts", "src/jvjjvjts", "src/modules/v1/user/__test__/logintestts"],
 	"exclude": ["node_modules", "build"],
 	"ts-node": {
 		"swc": true

@@ -1,4 +1,5 @@
 import Posts from "./post.service";
+import Users from "../user/user.service";
 import { Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../../../types";
 import { onSuccess, createError } from "../../common/middlewares/error.middleware";
@@ -11,9 +12,13 @@ export const createPost = async (req: AuthenticatedRequest, res: Response, next:
 			body: { title, content, tags }
 		} = req;
 
-		const postCheck = await new Posts("", "", title).findOne().catch(e => {
-			throw createError("Strange event happened while creating your post", 500);
+		const [postCheck, user] = await Promise.all([new Users(userId).findOne(), new Posts("", "", title).findOne()]).catch(e => {
+			throw createError("There was an error processing your request", 500);
 		});
+
+		if (!user) {
+			throw createError("Whoops! User not found", 400);
+		}
 
 		if (postCheck) {
 			throw createError("Whoops! You have already created a post with this title", 400);

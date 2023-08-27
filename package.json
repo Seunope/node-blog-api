@@ -10,12 +10,14 @@
 	"author": "Ope Mesonrale",
 	"license": "MIT",
 	"scripts": {
-		"test2": "jest --coverage --forceExit --detectOpenHandles",
-		"test": "jest --detectOpenHandles",
+		"set-node-env": "set NODE_ENV=test",
+		"test2": "yarn set-node-env && jest --setupFiles dotenv/config --coverage --forceExit --detectOpenHandles",
+		"test": "yarn set-node-env && jest --setupFiles dotenv/config --detectOpenHandles",
 		"coverage": "npx jest --coverage",
 		"dev": "nodemon -r dotenv/config src/index.ts",
-		"start": "node -r dotenv/config build/index.js",
+		"start": "node -r dotenv/config build/src/index.js",
 		"migrate": "yarn sequelize-cli db:migrate",
+		"migrate:docker": "yarn dotenv/config sequelize-cli db:migrate",
 		"migrate:u": "yarn sequelize-cli db:migrate:undo",
 		"migrate:u:file": "yarn sequelize-cli db:migrate:undo --name",
 		"migrate:u:a": "yarn sequelize-cli db:migrate:undo:all",
@@ -23,7 +25,7 @@
 		"migration": "yarn sequelize-cli migration:create --name",
 		"deploy": "yarn migrate && yarn build && yarn start",
 		"lint": "eslint --ext .ts --ignore-path .gitignore .",
-		"build": "tsc -p ."
+		"build": " rimraf ./build && tsc -p ."
 	},
 	"jest": {
 		"preset": "ts-jest",
@@ -75,6 +77,7 @@
 		"eslint-plugin-import": "^2.24.0",
 		"faker": "^6.6.6",
 		"jest": "^29.3.1",
+		"rimraf": "^5.0.1",
 		"supertest": "^6.3.3",
 		"ts-jest": "^29.0.3",
 		"ts-node": "^10.9.1",

@@ -12,7 +12,7 @@ export const createComment = async (req: AuthenticatedRequest, res: Response, ne
 		} = req;
 
 		const commentCheck = await new Comments("", userId, postId, content).findOne().catch(e => {
-			console.log("DDDD", e);
+			// console.log("DDDD", e);
 			throw createError("Strange event happened while adding your comment", 500);
 		});
 

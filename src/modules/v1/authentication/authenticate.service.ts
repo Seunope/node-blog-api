@@ -37,7 +37,6 @@ class AuthenticationService {
 				if (err) {
 					throw createError("Unauthorized action", 406);
 				} else {
-					// Correct token we send a new access token
 					const accessToken = jwt.sign(
 						{
 							name: decoded.name,

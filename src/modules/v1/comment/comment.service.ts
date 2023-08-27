@@ -79,6 +79,13 @@ class Comments {
 			.findAll({
 				order: [[`createdAt`, "DESC"]],
 				limit,
+				include: [
+					{
+						model: db.users,
+						as: "user",
+						attributes: ["name", "email"]
+					}
+				],
 				attributes: { exclude: ["updatedAt", "deletedAt"] }
 			})
 			.catch(e => {
@@ -94,6 +101,13 @@ class Comments {
 			limit,
 			after,
 			before,
+			include: [
+				{
+					model: db.users,
+					as: "user",
+					attributes: ["name", "email"]
+				}
+			],
 			order: !isEmpty(order) ? [[`${order.sortBy}`, `${order.sortIn}`]] : [[`createdAt`, `DESC`]] //ASC
 		});
 	}
